@@ -14,24 +14,26 @@ def add_time(start, duration):
     duration_hour = int(duration_stuff[0])
     duration_minutes = int(duration_stuff[1])
 
-    days = list(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
-    hours = list(range(1,13))
+    days = {1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday', 7:'Sunday'}
+    hours = {1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:11, 12:12, 13:1, 14:2, 15:3, 16:4, 17:5, 18:6, 19:7, 20:8, 21:9, 22:10, 23:11, 24:12}
     minutes = list(range(1,61))
 
     new_hour = start_hour + duration_hour
     new_minutes = start_minutes + duration_minutes
+    new_days = int(new_hour/24)
 
     ##Debemos definir cuando reinicia la suma
         #Para las horas
+    if new_hour > 12:
+        if new_hour > 24:
+            new_hour = hours[new_hour-(24*new_days)]
+        else:
+            new_hour = hours[new_hour-12]        
+    
+        
 
-    if new_hour >= 12:
-        laps_hours = int(duration_hour/12)
-        new_hour = duration_hour-12*laps_hours
-        if laps_hours % 2 == 1:
-            if day_night == 'PM':
-                day_night = 'AM'
-            else:
-                day_night = 'AM'
+    
+    
         
         #Para los minutos         
 
@@ -51,6 +53,6 @@ def add_time(start, duration):
     
     new_time = '{}:{} {}'.format(str(new_hour   ), str(new_minutes), day_night)
 
-    return print(new_time)
+    return print(new_hour)
 
-add_time('12:05 PM', '2:02')
+add_time('8:16 AM', '12:02')
