@@ -1,6 +1,6 @@
 def add_time(start, duration):
 
-    ##Defirnimos los insumos que vamos a usar
+    ##Definimos los insumos que vamos a usar
 
     start_stuff = start.split()
     time = start_stuff[0]
@@ -30,6 +30,13 @@ def add_time(start, duration):
         else:
             new_hour = hours[new_hour-12]        
     
+        #Para el periodo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Revisar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    if new_days/12 % 2 == 1:
+        if day_night == 'PM':
+            day_night = 'AM'
+        else:
+            day_night = 'PM'
+        
         
 
     
@@ -44,8 +51,7 @@ def add_time(start, duration):
 
     ##Definimos la salida
 
-    if new_hour == 0:
-        new_hour = '12'
+    
 
     if new_minutes in range(0,10):
         new_minutes = '0{}'.format(new_minutes)
@@ -53,6 +59,6 @@ def add_time(start, duration):
     
     new_time = '{}:{} {}'.format(str(new_hour   ), str(new_minutes), day_night)
 
-    return print(new_hour)
+    return print()
 
-add_time('8:16 AM', '12:02')
+add_time('6:30 PM', '205:12')
