@@ -25,17 +25,23 @@ def add_time(start, duration):
     ##Debemos definir cuando reinicia la suma
         #Para las horas
     if new_hour > 12:
-        if new_hour > 24:
-            new_hour = hours[new_hour-(24*new_days)]
-        else:
-            new_hour = hours[new_hour-12]        
-    
-        #Para el periodo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Revisar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    if new_days/12 % 2 == 1:
         if day_night == 'PM':
             day_night = 'AM'
         else:
             day_night = 'PM'
+        if new_hour > 24:
+            laps = new_hour/12
+            new_hour = hours[new_hour-(24*new_days)]
+            if int(laps) % 2 == 1:
+                if day_night == 'PM':
+                    day_night = 'AM'
+                else:
+                    day_night = 'PM'         
+        else:
+            new_hour = hours[new_hour-12]        
+    
+        #Para el periodo 
+    
         
         
 
@@ -59,6 +65,6 @@ def add_time(start, duration):
     
     new_time = '{}:{} {}'.format(str(new_hour   ), str(new_minutes), day_night)
 
-    return print()
+    return print(new_time)
 
-add_time('6:30 PM', '205:12')
+add_time('2:59 AM', '24:05')
