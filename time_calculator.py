@@ -18,43 +18,49 @@ def add_time(start, duration, day='today'):
     days = list(['Monday','Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
     hours = {1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:11, 12:12, 13:1, 14:2, 15:3, 16:4, 17:5, 18:6, 19:7, 20:8, 21:9, 22:10, 23:11, 24:12}
 
+    #Sumamos lo que tenemos y definimos días y semanas
     new_hour = start_hour + duration_hour
-    
     new_minutes = start_minutes + duration_minutes
-    laps_minutes = int(new_minutes//60)
 
-    new_days = int(new_hour//24)
+    new_days = new_hour/24
+    new_weeks = new_days/7
 
-    new_weeks = int(new_days//7)
+    #Vamos a definir la cantidad de veces que que se repiten intervalos de interés 
+    laps_hours = new_hour/24
+    laps_minutes = new_minutes/60
+    laps_days = new_days/7
+    
+
+    #Conociendo la cantidad de veces que se repiten podemos definir
+    new_hour = new_hour + laps_minutes  #los minutos definen las horas
+    new_days = new_hour + laps_hours    #las horas definen los días
+    new_weeks = new_weeks + laps_days   
 
     ##Debemos definir cuando reinicia la suma
         #Para los minutos   
-    if new_minutes > 59:
-        new_minutes = new_minutes-60
-        new_hour = new_hour + laps_minutes
+    #if new_minutes > 59:
+    #    new_minutes = new_minutes-60
+    #    new_hour = new_hour + laps_minutes
 
 
         #Para las horas
-    if new_hour >= 24:
-        new_hour = hours[new_hour-(24*new_days)]
-    else:
-        if new_hour > 12:
-            new_hour = hours[new_hour-12]  
-
-              
+    #if new_hour >= 24:
+    #    new_hour = hours[new_hour-(24*new_days)]
+    #else:
+    #    if new_hour > 12:
+    #        new_hour = hours[new_hour-12]  
+       
     
         #Para los dias
-    if day != 'today':
-        week_day = dic_days.get(day)
-        if new_days >= 1:
-            final_day = days[(week_day+new_days-(7*new_weeks))-1]
-        else:
-            final_day = days[week_day-1]
+    #if day != 'today':
+    #    week_day = dic_days.get(day)
+    #    if new_days >= 1:
+    #        final_day = days[(week_day+new_days-(7*new_weeks))-1]
+    #    else:
+    #        final_day = days[week_day-1]
 
         
-   
-        
-    
+
     ##Definimos la salida
         #minutos
     if new_minutes in range(0,10):
