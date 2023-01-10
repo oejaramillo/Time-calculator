@@ -25,41 +25,45 @@ def add_time(start, duration, day='today'):
     new_days = new_hour/24
     new_weeks = new_days/7
 
-    #Vamos a definir la cantidad de veces que que se repiten intervalos de interés 
-    laps_hours = new_hour/24
-    laps_minutes = new_minutes/60
-    laps_days = new_days/7
-    
+    #Vamos a definir la cantidad de veces que que se repiten intervalos de interés para cuando sean numeros muy grandes
+    laps_minutes = new_minutes/60    
 
     #Conociendo la cantidad de veces que se repiten podemos definir
-    new_hour = new_hour + laps_minutes  #los minutos definen las horas
-    new_days = new_hour + laps_hours    #las horas definen los días
-    new_weeks = new_weeks + laps_days   
+    new_hour = new_hour + laps_minutes  #los minutos definen las horas   
 
-    ##Debemos definir cuando reinicia la suma
+    #Ahora podemos definir el periodo del dia
+    if int(new_hour/12) % 2 == 1:
+        if day_night == 'AM':
+            new_day_night = 'PM'
+        else:
+            new_day_night = 'AM'
+    else:
+        if day_night == 'AM':
+            new_day_night = 'AM'
+        else:
+           new_day_night = 'PM'
+    
+    ##Ahora debemos elegir cuando reinicia la suma
         #Para los minutos   
-    #if new_minutes > 59:
-    #    new_minutes = new_minutes-60
-    #    new_hour = new_hour + laps_minutes
-
+    if new_minutes > 59:
+        new_minutes = new_minutes-60
 
         #Para las horas
-    #if new_hour >= 24:
-    #    new_hour = hours[new_hour-(24*new_days)]
-    #else:
-    #    if new_hour > 12:
-    #        new_hour = hours[new_hour-12]  
-       
+    if new_hour >= 24:
+        new_hour = new_hour - (24*new_days)
+    else:
+        if new_hour >= 12:
+            new_hour = new_hour - 12
+        else:
+            new_hour = new_hour    
     
         #Para los dias
-    #if day != 'today':
-    #    week_day = dic_days.get(day)
-    #    if new_days >= 1:
-    #        final_day = days[(week_day+new_days-(7*new_weeks))-1]
-    #    else:
-    #        final_day = days[week_day-1]
-
-        
+    if day != 'today':
+        week_day = dic_days.get(day)
+        if new_days >= 1:
+            final_day = week_day+new_days
+        else:
+            final_day = days[week_day-1]
 
     ##Definimos la salida
         #minutos
@@ -68,24 +72,21 @@ def add_time(start, duration, day='today'):
 
         #el resto 
     if day == 'today':
-        if new_days == 1:
+        if int(new_days) == 1:
             new_time = '{}:{} {} (next day)'.format(str(new_hour), str(new_minutes), new_day_night)
         else:
-            if new_days == 0:
+            if int(new_days) == 0:
                 if new_day_night != day_night:
                     new_time = '{}:{} {} (next day)'.format(str(new_hour), str(new_minutes), new_day_night)
                 else:
                     new_time = '{}:{} {}'.format(str(new_hour), str(new_minutes), new_day_night)
             else:
-                new_time = '{}:{} {} ({} days later)'.format(str(new_hour), str(new_minutes), new_day_night, str(new_days))
-            
-
-        
+                new_time = '{}:{} {} ({} days later)'.format(str(new_hour), str(new_minutes), new_day_night, str(new_days))    
     else:
-        if new_days == 1:
+        if int(new_days) == 1:
             new_time = '{}:{} {}, {} (next day)'.format(str(new_hour), str(new_minutes), day_night, final_day)
         else:
-            if new_days == 0:
+            if int(new_days) == 0:
                 new_time = '{}:{} {}, {}'.format(str(new_hour), str(new_minutes), day_night, final_day)
             else:
                 new_time = '{}:{} {}, {} ({} days later)'.format(str(new_hour), str(new_minutes), day_night, final_day, str(new_days))
@@ -95,4 +96,4 @@ def add_time(start, duration, day='today'):
 
     return print(new_time)
 
-add_time('11:43 PM', '24:20', 'Tuesday')
+add_time('11:59 PM', '25:02', 'Monday')
