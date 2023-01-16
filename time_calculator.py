@@ -1,70 +1,77 @@
-def add_time(start, duration):
+def add_time(start, duration, day='today'):
 
     ##Definimos los insumos que vamos a usar
+    start_hours, start_minutes = start.split(':') 
+    start_hours = int(start_hours)
+    start_minutes = int(start_minutes.split()[0])
 
-    start_stuff = start.split()
-    time = start_stuff[0]
-    day_night = start_stuff[1]
+    day_night = start.split()[1]
+
+    if day_night == 'PM':
+        start_hours += 12
+
+    #un diccionario para los dias
+    dic_days = {'Monday':1, 'Tuesday':2, 'Wednesday':3, 'Thursday':4, 'Friday':5, 'Saturday':6, 'Sunday':7}
     
-    time_stuff = time.split(':')
-    start_hour = int(time_stuff[0])
-    start_minutes = int(time_stuff[1])
+    #para la duracion
+    duration_hours, duration_minutes = duration.split(':')
+    duration_hours = int(duration_hours)
+    duration_minutes = int(duration_minutes)
 
-    duration_stuff = duration.split(':')
-    duration_hour = int(duration_stuff[0])
-    duration_minutes = int(duration_stuff[1])
+    #sumamos
+    new_hours = (start_hours + duration_hours) % 24
+    new_minutes = (start_minutes + duration_minutes) % 60
 
-    days = {1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday', 7:'Sunday'}
-    hours = {1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:11, 12:12, 13:1, 14:2, 15:3, 16:4, 17:5, 18:6, 19:7, 20:8, 21:9, 22:10, 23:11, 24:12}
-    minutes = list(range(1,61))
+    if (start_minutes + duration_minutes) >= 60:
+        new_hours = new_hours + 1
+    
+    #definimos el formato de 12 horas
+    if new_hours >= 12:
+        new_hours -= 12
+        day_night = 'PM'
+    else:
+        day_night = 'AM'
 
-    new_hour = start_hour + duration_hour
-    new_minutes = start_minutes + duration_minutes
-    new_days = int(new_hour/24)
+    #contamos los dias y las semanas
+    new_days = (new_hours + duration_hours)//24
 
-    ##Debemos definir cuando reinicia la suma
-        #Para las horas
-    if new_hour > 12:
-        if day_night == 'PM':
-            day_night = 'AM'
+    #contamos los dias
+    if day != 'today':
+        week_day = dic_days.get(day)
+        new_week_day = (week_day + new_days) % 7
+        final_day = list(dic_days.keys())[list(dic_days.values()).index(new_week_day)]
+    
+    #definimos la salida
+    if new_hours == 0:
+        new_hours = 12
+
+    new_time = f"{new_hours}:{new_minutes:02d} {day_night}"
+    
+    if day == 'today':
+        if new_days == 1:
+            new_time = f"{new_time} (next day)"
         else:
-            day_night = 'PM'
-        if new_hour > 24:
-            laps = new_hour/12
-            new_hour = hours[new_hour-(24*new_days)]
-            if int(laps) % 2 == 1:
-                if day_night == 'PM':
-                    day_night = 'AM'
+            if new_days > 1:
+                new_time = f"{new_time} ({new_days} days later)"
+            else:
+                if start.split()[1] != day_night:
+                    new_time = f"{new_time} (next day)"
                 else:
-                    day_night = 'PM'         
-        else:
-            new_hour = hours[new_hour-12]        
-    
-        #Para el periodo 
-    
-        
-        
+                    new_time = new_time
+    else:
+        if new_days == 1:
+            new_time = f"{new_time} {final_day} (next day)"
+        else:        
+            if new_days > 1:
+                new_time = f"{new_time} {final_day} ({new_days} days later)"
+            else:
+                if start.split()[1] != day_night:
+                    new_time = f"{new_time} {final_day} (next day)"
+                else:
+                    new_time = f"{new_time} {final_day}"
 
-    
-    
-        
-        #Para los minutos         
 
-    if new_minutes > 60:
-        laps_minutes = int(new_minutes/60)
-        new_minutes = new_minutes-60
-        new_hour = new_hour + laps_minutes
 
-    ##Definimos la salida
+    return print(new_days)
 
-    
-
-    if new_minutes in range(0,10):
-        new_minutes = '0{}'.format(new_minutes)
-
-    
-    new_time = '{}:{} {}'.format(str(new_hour   ), str(new_minutes), day_night)
-
-    return print(new_time)
-
-add_time('2:59 AM', '24:05')
+add_time('11:43 PM', '24:20')
