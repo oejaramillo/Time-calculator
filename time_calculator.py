@@ -28,12 +28,13 @@ def add_time(start, duration, day='today'):
     #definimos el formato de 12 horas
     if new_hours >= 12:
         new_hours -= 12
-        day_night = 'PM'
-    else:
-        day_night = 'AM'
+    #    day_night = 'PM'
+    #else:
+    #    day_night = 'AM'
 
     #contamos los dias y las semanas
-    new_days = (new_hours + duration_hours)//24
+    new_days = int(round((new_hours + duration_hours)/24, 0))
+    
 
     #contamos los dias
     if day != 'today':
@@ -45,6 +46,12 @@ def add_time(start, duration, day='today'):
     if new_hours == 0:
         new_hours = 12
 
+    if (start_hours + duration_hours) % 2 == 1:
+        if day_night == 'PM':
+            day_night = 'AM'
+        else:
+            day_night = 'PM'
+
     new_time = f"{new_hours}:{new_minutes:02d} {day_night}"
     
     if day == 'today':
@@ -54,24 +61,25 @@ def add_time(start, duration, day='today'):
             if new_days > 1:
                 new_time = f"{new_time} ({new_days} days later)"
             else:
-                if start.split()[1] != day_night:
-                    new_time = f"{new_time} (next day)"
-                else:
-                    new_time = new_time
+                if start.split()[1] == 'PM':
+                    if start.split()[1] != day_night:
+                        new_time = f"{new_time} (next day)"
     else:
         if new_days == 1:
-            new_time = f"{new_time} {final_day} (next day)"
+            new_time = f"{new_time}, {final_day} (next day)"
         else:        
             if new_days > 1:
-                new_time = f"{new_time} {final_day} ({new_days} days later)"
+                new_time = f"{new_time}, {final_day} ({new_days} days later)"
             else:
-                if start.split()[1] != day_night:
-                    new_time = f"{new_time} {final_day} (next day)"
+                if start.split()[1] == 'PM':
+                    if start.split()[1] != day_night:
+                        new_time = f"{new_time}, {final_day} (next day)"
+                    else:
+                        new_time = f"{new_time}, {final_day}"
                 else:
-                    new_time = f"{new_time} {final_day}"
+                    new_time = f"{new_time}, {final_day}"
 
 
+    return print(new_time)
 
-    return print(new_days)
-
-add_time('11:43 PM', '24:20')
+add_time("3:00 PM", "3:10")
