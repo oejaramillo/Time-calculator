@@ -7,16 +7,19 @@ def add_time(start, duration, day='today'):
 
     day_night = start.split()[1]
 
-    if day_night == 'PM':
-        start_hours += 12
-
-    #un diccionario para los dias
-    dic_days = {'Monday':1, 'Tuesday':2, 'Wednesday':3, 'Thursday':4, 'Friday':5, 'Saturday':6, 'Sunday':7}
-    
     #para la duracion
     duration_hours, duration_minutes = duration.split(':')
     duration_hours = int(duration_hours)
     duration_minutes = int(duration_minutes)
+    
+    if (start_hours + duration_hours) < 12:
+        day_night = start.split()[1]
+    else:  
+        if day_night == 'PM':
+            start_hours += 12
+
+    #un diccionario para los dias
+    dic_days = {'Monday':1, 'Tuesday':2, 'Wednesday':3, 'Thursday':4, 'Friday':5, 'Saturday':6, 'Sunday':7}
 
     #sumamos
     new_hours = (start_hours + duration_hours) % 24
@@ -62,9 +65,7 @@ def add_time(start, duration, day='today'):
                 else:
                     day_night = 'PM'
     
-    if (start_hours + duration_hours) < 12:
-        day_night = start.split()[1]
-
+    #Definimos formatos  
     new_time = f"{new_hours}:{new_minutes:02d} {day_night}"
     
     if day == 'today':
@@ -109,4 +110,4 @@ def add_time(start, duration, day='today'):
 
     return print(new_time)
 
-add_time("3:30 PM", "2:12", "Monday")
+add_time("2:59 AM", "24:00", "Wednesday")
